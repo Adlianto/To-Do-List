@@ -4,22 +4,21 @@ import { Head } from '@inertiajs/react';
 interface Task {
     id: string;
     title: string;
-    date: string; // YYYY-MM-DD
-    time: string; // HH:MM
+    date: string;
+    time: string;
     color?: string;
 }
 
 export default function Welcome() {
     const [viewMode, setViewMode] = useState<'detail' | 'Simpel'>('detail');
-    const [currentDate, setCurrentDate] = useState<Date>(new Date(2026, 5, 13)); // 13 Juni 2026
-    
+    const [currentDate, setCurrentDate] = useState<Date>(new Date(2026, 5, 13));
+
     const [selectedDateTasks, setSelectedDateTasks] = useState<Task[] | null>(null);
     const [selectedDateStr, setSelectedDateStr] = useState<string>('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    
-    // State drag dipertahankan seminimal mungkin hanya untuk efek opacity kartu saat digeser
+
     const [activeDragId, setActiveDragId] = useState<string | null>(null);
-    
+
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [newTaskDate, setNewTaskDate] = useState('2026-06-13');
     const [newTaskTime, setNewTaskTime] = useState('09:00');
@@ -30,7 +29,7 @@ export default function Welcome() {
         { id: '2', title: 'Implementasi auth Inertia dengan Laravel Breeze', date: '2026-06-13', time: '11:30', color: 'bg-blue-100/80 border-blue-300 text-blue-950' },
         { id: '3', title: 'Desain layout dashboard di Figma (draft kedua)', date: '2026-06-13', time: '14:00', color: 'bg-purple-100/80 border-purple-300 text-purple-950' },
         { id: '4', title: 'Selesaikan modul Microservices Java di Dicoding', date: '2026-06-13', time: '16:00', color: 'bg-emerald-100/80 border-emerald-300 text-emerald-950' },
-        
+
         { id: '5', title: 'Standup Meeting - NovaBoard Team', date: '2026-06-15', time: '10:00', color: 'bg-pink-100/80 border-pink-300 text-pink-950' },
         { id: '6', title: 'UX Audit Sync - Waveflow Studio', date: '2026-06-15', time: '11:00', color: 'bg-cyan-100/80 border-cyan-300 text-cyan-950' },
         { id: '7', title: 'Frontend Dev Sync - API Mapping Task', date: '2026-06-16', time: '10:15', color: 'bg-fuchsia-100/80 border-fuchsia-300 text-fuchsia-950' },
@@ -76,14 +75,12 @@ export default function Welcome() {
         }
     }, [currentDate, viewMode]);
 
-    // PROTEKSI GLOBAL FAIL-SAFE
     useEffect(() => {
         const globalDragEnd = () => setActiveDragId(null);
         window.addEventListener('dragend', globalDragEnd);
         return () => window.removeEventListener('dragend', globalDragEnd);
     }, []);
 
-    // ================= DRAG & DROP CODES =================
     const handleDragStart = (e: React.DragEvent, taskId: string) => {
         e.dataTransfer.setData('text/plain', taskId);
         setActiveDragId(taskId);
@@ -120,7 +117,7 @@ export default function Welcome() {
         <div className="min-h-screen bg-slate-100 flex flex-col font-sans text-slate-800 antialiased overflow-hidden">
             <Head title="projek itulah" />
 
-            {/* ================= NAVBAR STABIL ================= */}
+            {/* ================= NAVBAR ================= */}
             <header className="w-full bg-white border-b border-slate-200 px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm shrink-0 relative z-20">
                 <div className="flex items-center gap-3 w-full md:w-auto">
                     <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-white font-extrabold">BD</div>
@@ -141,26 +138,25 @@ export default function Welcome() {
                         <p className="font-black text-slate-800 text-sm mt-0.5">{dateLabel}</p>
                         <button onClick={() => handleNavigate('next')} className="p-1.5 hover:bg-white rounded-lg text-slate-600 transition"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                     </div>
-                    <button 
-                        onClick={() => { setNewTaskDate(formatDateKey(currentDate)); setIsCreateModalOpen(true); }} 
+                    <button
+                        onClick={() => { setNewTaskDate(formatDateKey(currentDate)); setIsCreateModalOpen(true); }}
                         className="bg-slate-950 text-white p-2.5 rounded-xl shadow-md hover:scale-105 active:scale-95 transition-all"
                     >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     </button>
                 </div>
             </header>
+            {/* ================= NAVBAR END ================= */}
 
-            {/* ================= AREA KONTEN UTAMA LEGA (FIXED LAYOUT SHIFT) ================= */}
+            {/* ================= MAIN KONTEN ================= */}
             <div className="flex-1 flex w-full overflow-hidden relative">
-                
-                {/* AREA KALENDER: Lebar stabil penuh 100% tanpa adanya mr-[240px] yang bikin UI lompat */}
                 <main className="flex-1 p-6 overflow-y-auto relative z-10">
 
-                    {/* MODE detail */}
+                    {/* Detail Mode */}
                     {viewMode === 'detail' && (
                         <div className="w-full bg-white border border-slate-200 rounded-[2rem] p-6 shadow-sm overflow-x-auto">
                             <div className="min-w-[1000px]">
-                                
+
                                 <div className="grid grid-cols-[90px_repeat(7,1fr)] border-b border-slate-100 pb-4 mb-2 text-center items-center">
                                     <div className="text-xs font-black text-slate-400 text-left pl-2">GMT+07</div>
                                     {Array.from({ length: 7 }).map((_, idx) => {
@@ -168,7 +164,7 @@ export default function Welcome() {
                                         const distanceToMonday = currentDay === 0 ? -6 : 1 - currentDay;
                                         const targetDayDate = new Date(currentDate);
                                         targetDayDate.setDate(currentDate.getDate() + distanceToMonday + idx);
-                                        
+
                                         const daysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
                                         const isToday = formatDateKey(new Date()) === formatDateKey(targetDayDate);
 
@@ -193,19 +189,19 @@ export default function Welcome() {
                                                 const distanceToMonday = currentDay === 0 ? -6 : 1 - currentDay;
                                                 const targetDayDate = new Date(currentDate);
                                                 targetDayDate.setDate(currentDate.getDate() + distanceToMonday + dayIdx);
-                                                
+
                                                 const dateStr = formatDateKey(targetDayDate);
                                                 const matchedTasks = tasks.filter(t => t.date === dateStr && t.time.startsWith(hour.split(':')[0]));
 
                                                 return (
-                                                    <div 
-                                                        key={dayIdx} 
+                                                    <div
+                                                        key={dayIdx}
                                                         onDragOver={(e) => e.preventDefault()}
                                                         onDrop={(e) => handleDropTaskWeek(e, dateStr, hour)}
                                                         className="px-2 h-full min-h-[75px] border-l border-slate-100/50 flex flex-col gap-1.5 justify-start transition-colors hover:bg-slate-50/20"
                                                     >
                                                         {matchedTasks.map(t => (
-                                                            <div 
+                                                            <div
                                                                 key={t.id}
                                                                 draggable
                                                                 onDragStart={(e) => handleDragStart(e, t.id)}
@@ -213,7 +209,7 @@ export default function Welcome() {
                                                                 className={`p-3.5 rounded-xl border text-xs font-black shadow-sm leading-snug transition-all cursor-grab active:cursor-grabbing hover:scale-[1.01] hover:shadow-md relative group/item flex justify-between items-start gap-2 ${t.color}`}
                                                             >
                                                                 <p className="font-extrabold tracking-tight leading-normal flex-1">{t.title}</p>
-                                                                <button 
+                                                                <button
                                                                     onClick={(e) => { e.stopPropagation(); handleDeleteTaskDirect(t.id); }}
                                                                     className="opacity-0 group-hover/item:opacity-100 text-rose-500 font-bold text-[10px] w-4 h-4 rounded hover:bg-rose-100 flex items-center justify-center transition-all shrink-0"
                                                                 >
@@ -227,12 +223,12 @@ export default function Welcome() {
                                         </div>
                                     ))}
                                 </div>
-                                
+
                             </div>
                         </div>
                     )}
 
-                    {/* MODE Simpel */}
+                    {/* Simpel Mode */}
                     {viewMode === 'Simpel' && (
                         <div className="flex flex-col bg-white border border-slate-200 rounded-3xl p-6 shadow-sm min-h-[500px]">
                             <div className="grid grid-cols-7 gap-2 text-center font-black text-[11px] text-slate-400 uppercase tracking-widest mb-4">
@@ -273,10 +269,10 @@ export default function Welcome() {
                         </div>
                     )}
                 </main>
-
             </div>
+            {/* ================= MAIN KONTEN END ================= */}
 
-            {/* ================= MODALS DETAILED POP-UPS ================= */}
+            {/* ================= POP-UP ================= */}
             {selectedDateTasks !== null && (
                 <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-[2rem] w-full max-w-md p-6 shadow-2xl border">
