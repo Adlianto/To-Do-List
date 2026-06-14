@@ -23,7 +23,6 @@ export default function Welcome() {
     const [newTaskDate, setNewTaskDate] = useState('2026-06-13');
     const [newTaskTime, setNewTaskTime] = useState('09:00');
 
-    // Data Dummy Terdistribusi Akurat
     const [tasks, setTasks] = useState<Task[]>([
         { id: '1', title: 'Setup database PostgreSQL & Schema Migrations', date: '2026-06-13', time: '09:00', color: 'bg-amber-100/80 border-amber-300 text-amber-950' },
         { id: '2', title: 'Implementasi auth Inertia dengan Laravel Breeze', date: '2026-06-13', time: '11:30', color: 'bg-blue-100/80 border-blue-300 text-blue-950' },
