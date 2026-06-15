@@ -114,7 +114,7 @@ export default function Welcome() {
 
     return (
         <div className="min-h-screen bg-slate-100 flex flex-col font-sans text-slate-800 antialiased overflow-hidden">
-            <Head title="projek itulah" />
+            <Head title="web ngawur" />
 
             {/* ================= NAVBAR ================= */}
             <header className="w-full bg-white border-b border-slate-200 px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm shrink-0 relative z-20">
